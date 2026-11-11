@@ -1,0 +1,3 @@
+# GUI（pywebview）额外依赖；Agent 核心依赖见仓库根 requirements.txt
+pywebview>=5.0
+pyinstaller>=6.0

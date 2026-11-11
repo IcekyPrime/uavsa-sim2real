@@ -1,0 +1,8 @@
+# UAVSA-v1.0 核心 Python 依赖（agent / sim_bridge / algo_bridge 共用）
+fastapi>=0.110
+uvicorn[standard]>=0.29
+httpx>=0.27
+pydantic>=2.6
+numpy>=1.24
+python-dotenv>=1.0
+PyYAML>=6.0

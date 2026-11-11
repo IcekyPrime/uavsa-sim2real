@@ -1,0 +1,14 @@
+# docker1 轻量镜像：仅 Python + sim_bridge + agent（Mock 后端），用于快速联调容器通信与编排
+# Docker Hub 直连受限，使用 daocloud 镜像源
+FROM docker.m.daocloud.io/library/python:3.10-slim
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+COPY docker1/sim_bridge /workspace/sim_bridge
+COPY docker1/agent /workspace/agent
+COPY docker1/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /workspace
+ENTRYPOINT ["/entrypoint.sh"]

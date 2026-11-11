@@ -1,0 +1,13 @@
+# docker2 轻量镜像：仅 Python + algo_bridge（Mock 后端），用于快速联调
+# Docker Hub 直连受限，使用 daocloud 镜像源
+FROM docker.m.daocloud.io/library/python:3.10-slim
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+COPY docker2/algo_bridge /workspace/algo_bridge
+COPY docker2/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /workspace
+ENTRYPOINT ["/entrypoint.sh"]

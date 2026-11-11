@@ -1,0 +1,55 @@
+name: uavsa-v1.0
+
+# 两个 Docker 容器模拟两台服务器：
+#   docker1 = 仿真平台（Gazebo + PX4）+ sim_bridge + agent
+#   docker2 = 被测算法（EGO-Planner）+ algo_bridge
+services:
+  docker1:
+    build:
+      context: .
+      dockerfile: docker1/Dockerfile
+    container_name: uavsa-docker1
+    hostname: docker1
+    ports:
+      - "${AGENT_PORT:-8000}:8000"        # agent（GUI 连接）
+      - "${SIM_BRIDGE_PORT:-8001}:8001"    # sim_bridge
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.deepseek.com}
+      - LLM_MODEL=${LLM_MODEL:-deepseek-v4-pro}
+      - LLM_MAX_ITERATIONS=${LLM_MAX_ITERATIONS:-5}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.2}
+      # sim_bridge 与 agent 同容器，用 localhost；algo_bridge 在 docker2，用服务名
+      - SIM_BRIDGE_URL=http://localhost:8001
+      - ALGO_BRIDGE_URL=http://docker2:8002
+      - SIM_MODEL=${SIM_MODEL:-gz_x500}
+      - SIM_WORLD=${SIM_WORLD:-default}
+      - SIM_HEADLESS=${SIM_HEADLESS:-1}
+      - SIM_MOCK=${SIM_MOCK:-0}
+    volumes:
+      - ./shared:/workspace/shared
+    networks:
+      - uavsa-net
+    depends_on:
+      - docker2
+
+  docker2:
+    build:
+      context: .
+      dockerfile: docker2/Dockerfile
+    container_name: uavsa-docker2
+    hostname: docker2
+    ports:
+      - "${ALGO_BRIDGE_PORT:-8002}:8002"    # algo_bridge（调试用）
+    environment:
+      - ALGO_BRIDGE_PORT=8002
+      - SIM_BRIDGE_URL=http://docker1:8001
+      - ALGO_MOCK=${ALGO_MOCK:-0}
+    volumes:
+      - ./shared:/workspace/shared
+    networks:
+      - uavsa-net
+
+networks:
+  uavsa-net:
+    driver: bridge

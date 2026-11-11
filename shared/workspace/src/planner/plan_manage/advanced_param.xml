@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <node pkg="ego_planner" type="ego_planner_node" name="ego_planner_node" output="screen">
+    <param name="planner/resolution" value="0.15"/>
+    <param name="planner/max_vel" value="0.9"/>
+    <param name="planner/max_acc" value="0.6"/>
+    <param name="planner/poly_traj_time" value="2.5"/>
+    <param name="planner/w_smooth" value="1.4"/>
+    <param name="planner/w_collision" value="1.0"/>
+    <param name="planner/w_distance" value="0.5"/>
+    <param name="planner/max_iteration_num" value="100"/>
+  </node>
+</launch>

@@ -1,0 +1,48 @@
+name: uavsa-v1.0-slim
+
+# 轻量联调编排：验证双容器通信 + Agent 编排（Mock 仿真/算法数据）
+# 用法：docker compose -f docker-compose.slim.yml up --build
+services:
+  docker1:
+    build:
+      context: .
+      dockerfile: docker1/Dockerfile.slim
+    container_name: uavsa-docker1
+    hostname: docker1
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.deepseek.com}
+      - LLM_MODEL=${LLM_MODEL:-deepseek-v4-pro}
+      - LLM_MAX_ITERATIONS=${LLM_MAX_ITERATIONS:-5}
+      - SIM_BRIDGE_URL=http://localhost:8001
+      - ALGO_BRIDGE_URL=http://docker2:8002
+      - SIM_MOCK=1
+    volumes:
+      - ./shared:/workspace/shared
+    networks:
+      - uavsa-net
+    depends_on:
+      - docker2
+
+  docker2:
+    build:
+      context: .
+      dockerfile: docker2/Dockerfile.slim
+    container_name: uavsa-docker2
+    hostname: docker2
+    ports:
+      - "8002:8002"
+    environment:
+      - ALGO_BRIDGE_PORT=8002
+      - ALGO_MOCK=1
+    volumes:
+      - ./shared:/workspace/shared
+    networks:
+      - uavsa-net
+
+networks:
+  uavsa-net:
+    driver: bridge

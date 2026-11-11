@@ -1,0 +1,50 @@
+# 环境变量与本地配置（含密钥 / 集群信息）
+.env
+.env.*
+!.env.example
+gui/uavsa_gui_config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+deps/
+**/deps/
+
+# 构建产物
+build/
+dist/
+*.spec
+!gui/UAVSA.spec
+
+# ROS / colcon
+install/
+log/
+
+# 运行时产物
+agent_process.html
+sim2real_events.json
+shared/results/*
+!shared/results/README.md
+shared/logs/*
+!shared/logs/README.md
+shared/knowledge/cases/*
+!shared/knowledge/cases/.gitkeep
+shared/knowledge/.archive/
+shared/workspace/.bak/
+
+# 目录链接（Windows Junction）
+docker1/shared/
+
+# 知识库索引（可重建）
+shared/knowledge/.index/
+*.faiss
+*.pkl
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

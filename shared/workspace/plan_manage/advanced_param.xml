@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config>
+  <resolution>0.12</resolution>
+  <max_vel>1.35</max_vel>
+  <max_acc>2.2</max_acc>
+  <poly_traj_time>2.2</poly_traj_time>
+  <w_smooth>1.2</w_smooth>
+  <w_collision>1.5</w_collision>
+  <max_iteration_num>60</max_iteration_num>
+  <control_freq>50.0</control_freq>
+</config>
